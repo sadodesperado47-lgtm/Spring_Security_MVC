@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<h1>USERS</h1>
+<form th:action="@{/users}" method="post">
+    <input type="text" name="name" placeholder="Name" required />
+    <input type="text" name="lastname" placeholder="Last name" required />
+    <input type="email" name="email" placeholder="E-Mail" required />
+    <button type="submit">Add User</button>
+</form>
+<br>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>LastName</th>
+        <th>Email</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <th:block th:if="${editId} == ${user.id}">
+            <!-- Строка формы редактирования -->
+            <form th:action="@{/users/edit}" th:object="${editUser}" method="post">
+                <td><input type="hidden" th:field="*{id}" /><input type="text" th:field="*{name}" required /></td>
+                <td><input type="text" th:field="*{lastname}" required /></td>
+                <td><input type="email" th:field="*{email}" required /></td>
+                <td>
+                    <button type="submit">Save</button>
+                    <a th:href="@{/users}">Cancel</a>
+                </td>
+            </form>
+        </th:block>
+        <th:block th:if="${editId} != ${user.id}">
+            <!-- Обычная строка просмотра -->
+            <td th:text="${user.name}">Name</td>
+            <td th:text="${user.lastname}">LastName</td>
+            <td th:text="${user.email}">Email</td>
+            <td>
+                <a th:href="@{/users(editId=${user.id})}">Edit</a>
+                <a th:href="@{/users/delete/{id}(id=${user.id})}">Remove</a>
+            </td>
+        </th:block>
+    </tr>
+</table>
+</body>
+</html>
