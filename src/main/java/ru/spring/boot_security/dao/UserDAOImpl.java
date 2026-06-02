@@ -3,7 +3,7 @@ package ru.spring.boot_security.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.example.springbootcrud.model.User;
+import ru.spring.boot_security.model.User;
 import org.springframework.stereotype.Repository;
 
 

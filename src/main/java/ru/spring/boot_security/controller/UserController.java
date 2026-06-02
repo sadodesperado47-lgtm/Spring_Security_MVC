@@ -1,7 +1,7 @@
 package ru.spring.boot_security.controller;
 
-import org.example.springbootcrud.model.User;
-import org.example.springbootcrud.service.UserService;
+import ru.spring.boot_security.model.User;
+import ru.spring.boot_security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
