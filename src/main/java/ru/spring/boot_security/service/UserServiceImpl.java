@@ -1,7 +1,7 @@
 package ru.spring.boot_security.service;
 
-import org.example.springbootcrud.dao.UserDAO;
-import org.example.springbootcrud.model.User;
+import ru.spring.boot_security.dao.UserDAO;
+import ru.spring.boot_security.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

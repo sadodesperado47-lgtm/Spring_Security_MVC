@@ -1,5 +1,6 @@
 package ru.spring.boot_security.controller;
 
+import org.springframework.web.bind.annotation.*;
 import ru.spring.boot_security.model.User;
 import ru.spring.boot_security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

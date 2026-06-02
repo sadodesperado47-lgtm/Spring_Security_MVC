@@ -1,7 +1,7 @@
 package ru.spring.boot_security.service;
 
 
-import org.example.springbootcrud.model.User;
+import ru.spring.boot_security.model.User;
 
 import java.util.List;
 
