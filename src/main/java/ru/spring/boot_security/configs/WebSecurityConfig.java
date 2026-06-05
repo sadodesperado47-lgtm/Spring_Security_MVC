@@ -7,17 +7,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
     private final SuccessUserHandler successUserHandler;
-    private final org.springframework.security.core.userdetails.UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public WebSecurityConfig(SuccessUserHandler successUserHandler,
-                             org.springframework.security.core.userdetails.UserDetailsService userDetailsService) {
+                             UserDetailsService userDetailsService) {
         this.successUserHandler = successUserHandler;
         this.userDetailsService = userDetailsService;
     }
