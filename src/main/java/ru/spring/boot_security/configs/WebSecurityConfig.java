@@ -40,7 +40,7 @@ public class WebSecurityConfig {
                         .permitAll())
                 .logout(logout -> logout.permitAll());
 
-        // Связываем с кастомным userDetailsService (из вашей базы)
+
         http.userDetailsService(userDetailsService);
 
         return http.build();
