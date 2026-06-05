@@ -10,13 +10,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToMany;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.Set;
-
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @Column(name="id")
@@ -30,55 +33,74 @@ public class User {
     private String lastname;
 
     @Column(name="email")
-    private  String email;
+    private String email;
 
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "username", unique = true)
+    private String username;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<UserRole> roles;
 
-    public User(Long id, String name, String lastname, String email, Set<UserRole> roles) {
-        this.id = id;
+
+    public User() {}
+
+    public User(String password, String username) {
+        this.password = password;
+        this.username = username;
+    }
+    public User(String name, String lastname, String email, Set<UserRole> roles) {
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.roles = roles;
     }
 
-    public User() {
 
+    public Set<UserRole> getRoles() {
+        return roles;
     }
 
-    public Long getId() {
-        return id;
+    public void setRoles(Set<UserRole> roles) {
+        this.roles = roles;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public @Nullable String getPassword() {
+        return password;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public String getUsername() {
+        return username;
     }
 
-    public String getLastname() {
-        return lastname;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public String getEmail() {
-        return email;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

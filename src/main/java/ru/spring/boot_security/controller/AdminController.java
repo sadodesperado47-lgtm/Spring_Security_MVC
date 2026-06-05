@@ -9,13 +9,13 @@ import org.springframework.ui.Model;
 
 
 @Controller
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/admin")
+public class AdminController {
 
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public AdminController(UserService userService) {
         this.userService = userService;
     }
 

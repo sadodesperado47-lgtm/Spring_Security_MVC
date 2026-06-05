@@ -7,13 +7,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToMany;
-
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Set;
 
+
 @Entity
 @Table(name = "roles")
-public class UserRole {
+public class UserRole implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +55,11 @@ public class UserRole {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name; // по соглашению: "ROLE_USER", "ROLE_ADMIN", ...
     }
 
     @Override
