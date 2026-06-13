@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import ru.spring.boot_security.model.User;
 import ru.spring.boot_security.repository.UserRepository;
 
+import java.util.Optional;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -18,8 +20,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) throw new UsernameNotFoundException("User not found");
-        return user;
+        return Optional.ofNullable(userRepository.findByUsername(username))
+                .map(u -> (UserDetails) u)
+                .orElseThrow(() -> new UsernameNotFoundException("User не найден: " + username));
     }
 }

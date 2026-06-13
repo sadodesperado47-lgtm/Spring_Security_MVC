@@ -41,25 +41,10 @@ public class UserRole implements GrantedAuthority {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
 
     @Override
     public String getAuthority() {
-        return name; // по соглашению: "ROLE_USER", "ROLE_ADMIN", ...
+        return name;
     }
 
     @Override
