@@ -4,7 +4,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.spring.boot_security.model.User;
 import ru.spring.boot_security.repository.UserRepository;
 
 import java.util.Optional;
