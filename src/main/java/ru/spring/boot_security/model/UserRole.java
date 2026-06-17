@@ -48,6 +48,18 @@ public class UserRole implements GrantedAuthority {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserRole userRole = (UserRole) o;
+        return id != null && id.equals(userRole.id);
+    }
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
     public String toString() {
         return "UserRole{" +
                 "name='" + name + '\'' +
