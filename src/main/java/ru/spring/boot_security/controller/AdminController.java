@@ -42,10 +42,10 @@ public class AdminController {
     }
 
     @PostMapping
-    public String addUser(@ModelAttribute("user") User user, @RequestParam(value = "rolesIds", required = false)List<Long> rolesIds) {
-        if(rolesIds != null) {
+    public String addUser(@ModelAttribute("user") User user, @RequestParam(value = "roleIds", required = false)List<Long> roleIds) {
+        if(roleIds != null) {
             Set<UserRole> roles = new HashSet<>();
-            for(Long roleId: rolesIds) {
+            for(Long roleId: roleIds) {
                 userRoleRepository.findById(roleId).ifPresent(roles::add);
             }
             user.setRoles(roles);
@@ -61,14 +61,15 @@ public class AdminController {
     }
 
     @PostMapping("/edit")
-    public String updateUser(@ModelAttribute("user") User user, @RequestParam(value = "rolesIds", required = false)List<Long> rolesIds) {
-        if (rolesIds != null) {
+    public String updateUser(@ModelAttribute("user") User user, @RequestParam(value = "roleIds", required = false)List<Long> roleIds) {
+        if (roleIds != null) {
             Set<UserRole> roles = new HashSet<>();
-            for (Long roleId : rolesIds) {
+            for (Long roleId : roleIds) {
                 userRoleRepository.findById(roleId).ifPresent(roles::add);
             }
-            userService.updateUser(user);
-            return "redirect:/admin";
+            user.setRoles(roles);
         }
+        userService.updateUser(user);
+        return "redirect:/admin";
     }
 }

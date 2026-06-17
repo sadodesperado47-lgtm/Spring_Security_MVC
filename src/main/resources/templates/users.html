@@ -6,7 +6,7 @@
     <style>
         table { border-collapse: collapse; width: 100%; }
         th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
-        th { background-color: #4CAF50; color: white; }
+        th { background-color: #2c49e0; color: white; }
         .role-badge {
             display: inline-block;
             padding: 2px 8px;
@@ -18,9 +18,9 @@
         }
         .btn { padding: 6px 12px; border: none; border-radius: 4px;
             cursor: pointer; text-decoration: none; display: inline-block; }
-        .btn-green  { background: #3dd343; color: white; }
+        .btn-green  { background: #294ab6; color: white; }
         .btn-blue   { background: #2196F3; color: white; }
-        .btn-red    { background: #f4367f; color: white; }
+        .btn-red    { background: #d70f5c; color: white; }
         .btn-gray   { background: #9E9E9E; color: white; }
     </style>
 </head>
@@ -103,7 +103,6 @@
 
                 <td>
                     <button type="submit" class="btn btn-blue">Сохранить</button>
-                    <!-- Cancel возвращает на /admin без editUser → режим просмотра -->
                     <a th:href="@{/admin}" class="btn btn-gray">Отмена</a>
                 </td>
 
@@ -129,7 +128,7 @@
 
             <td>
                 <a th:href="@{/admin/edit/{id}(id=${user.id})}"
-                   class="btn btn-blue">Редактировать</a>
+                   class="btn btn-blue">Изменить</a>
 
                 <a th:href="@{/admin/delete/{id}(id=${user.id})}"
                    class="btn btn-red"
