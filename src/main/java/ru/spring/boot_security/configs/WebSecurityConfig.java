@@ -28,7 +28,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/index").permitAll()
@@ -38,9 +38,10 @@ public class WebSecurityConfig {
                 .formLogin(form -> form
                         .successHandler(successUserHandler)
                         .permitAll())
-                .logout(logout -> logout.permitAll());
-
-
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/")
+                        .permitAll())
+                .csrf(csrf->csrf.disable());
         http.userDetailsService(userDetailsService);
 
         return http.build();

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -32,21 +31,21 @@ public class AdminController {
         return "users";
     }
 
-     @PostMapping
+    @PostMapping
     public String addUser(@ModelAttribute("user") User user) {
         userService.addUser(user);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 
     @GetMapping("/delete/{id}")
     public String removeUser(@PathVariable Long id) {
         userService.removeUser(id);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 
     @PostMapping("/edit")
     public String updateUser(@ModelAttribute("user") User user) {
         userService.updateUser(user);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 }

@@ -14,6 +14,6 @@ public class UserPageController {
     @GetMapping
     public String userPage(Model model, @AuthenticationPrincipal User user) {
         model.addAttribute("user", user);
-        return "user"; // ваша страница user.html
+        return "user";
     }
 }
