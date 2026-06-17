@@ -3,47 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <title>Users</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        .role-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            background-color: #0f3858;
+            color: white;
+            margin: 2px;
+        }
+        .btn { padding: 6px 12px; border: none; border-radius: 4px;
+            cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-green  { background: #3dd343; color: white; }
+        .btn-blue   { background: #2196F3; color: white; }
+        .btn-red    { background: #f4367f; color: white; }
+        .btn-gray   { background: #9E9E9E; color: white; }
+    </style>
 </head>
 <body>
+
 <h1>USERS</h1>
-<form th:action="@{/users}" method="post">
-    <input type="text" name="name" placeholder="Name" required />
-    <input type="text" name="lastname" placeholder="Last name" required />
-    <input type="email" name="email" placeholder="E-Mail" required />
-    <button type="submit">Add User</button>
+
+<!--ФОРМА ДОБАВЛЕНИЯ ПОЛЬЗОВАТЕЛЯ-->
+<form th:action="@{/admin}" method="post">
+
+    <input type="text"     name="name"     placeholder="Имя"      required />
+    <input type="text"     name="lastname" placeholder="Фамилия"   required />
+    <input type="email"    name="email"    placeholder="E-Mail"     required />
+    <input type="text"     name="username" placeholder="Логин"      required />
+    <input type="password" name="password" placeholder="Пароль"     required />
+
+    <!-- Чекбоксы ролей -->
+    <span th:each="role : ${allRoles}">
+        <input type="checkbox"
+               name="roleIds"
+               th:value="${role.id}"
+               th:id="'new-role-' + ${role.id}" />
+        <label th:for="'new-role-' + ${role.id}"
+               th:text="${role.authority}">ROLE</label>
+    </span>
+
+    <button type="submit" class="btn btn-green">Добавить</button>
 </form>
-<br>
+
+<br/>
+
+<!-- ТАБЛИЦА ПОЛЬЗОВАТЕЛЕЙ-->
 <table>
+    <thead>
     <tr>
-        <th>Name</th>
-        <th>LastName</th>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
         <th>Email</th>
-        <th>Action</th>
+        <th>Логин</th>
+        <th>Роли</th>
+        <th>Действия</th>
     </tr>
+    </thead>
+    <tbody>
+
     <tr th:each="user : ${users}">
-        <th:block th:if="${editId} == ${user.id}">
-            <!-- Строка формы редактирования -->
-            <form th:action="@{/users/edit}" th:object="${editUser}" method="post">
-                <td><input type="hidden" th:field="*{id}" /><input type="text" th:field="*{name}" required /></td>
-                <td><input type="text" th:field="*{lastname}" required /></td>
-                <td><input type="email" th:field="*{email}" required /></td>
+
+        <!-- РЕЖИМ РЕДАКТИРОВАНИЯ-->
+        <th:block th:if="${editUser != null and editUser.id == user.id}">
+
+            <form th:action="@{/admin/edit}"
+                  th:object="${editUser}"
+                  method="post"
+                  style="display: contents;">
+
                 <td>
-                    <button type="submit">Save</button>
-                    <a th:href="@{/users}">Cancel</a>
+                    <input type="hidden" th:field="*{id}" />
+                    <span th:text="${user.id}"></span>
                 </td>
+
+                <td><input type="text"  th:field="*{name}"     required /></td>
+                <td><input type="text"  th:field="*{lastname}"  required /></td>
+                <td><input type="email" th:field="*{email}"     required /></td>
+                <td><input type="text"  th:field="*{username}"  required /></td>
+
+                <!-- Чекбоксы ролей при редактировании -->
+
+                <td>
+                        <span th:each="role : ${allRoles}">
+                            <input type="checkbox"
+                                   name="roleIds"
+                                   th:value="${role.id}"
+                                   th:id="'edit-role-' + ${role.id}"
+                                   th:checked="${editUser.roles.contains(role)}" />
+                            <label th:for="'edit-role-' + ${role.id}"
+                                   th:text="${role.authority}">ROLE</label>
+                        </span>
+                </td>
+
+                <td>
+                    <button type="submit" class="btn btn-blue">Сохранить</button>
+                    <!-- Cancel возвращает на /admin без editUser → режим просмотра -->
+                    <a th:href="@{/admin}" class="btn btn-gray">Отмена</a>
+                </td>
+
             </form>
         </th:block>
-        <th:block th:if="${editId} != ${user.id}">
-            <!-- Обычная строка просмотра -->
-            <td th:text="${user.name}">Name</td>
-            <td th:text="${user.lastname}">LastName</td>
-            <td th:text="${user.email}">Email</td>
+
+        <!-- РЕЖИМ ПРОСМОТРА-->
+        <th:block th:if="${editUser == null or editUser.id != user.id}">
+
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.lastname}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.username}"></td>
+
+            <!-- Роли пользователя в виде значков -->
             <td>
-                <a th:href="@{/users(editId=${user.id})}">Edit</a>
-                <a th:href="@{/users/delete/{id}(id=${user.id})}">Remove</a>
+                    <span th:each="role : ${user.roles}"
+                          class="role-badge"
+                          th:text="${role.authority}">
+                    </span>
             </td>
+
+            <td>
+                <a th:href="@{/admin/edit/{id}(id=${user.id})}"
+                   class="btn btn-blue">Редактировать</a>
+
+                <a th:href="@{/admin/delete/{id}(id=${user.id})}"
+                   class="btn btn-red"
+                   onclick="return confirm('Удалить?')">Удалить</a>
+            </td>
+
         </th:block>
+
     </tr>
+
+    </tbody>
 </table>
+
 </body>
 </html>
