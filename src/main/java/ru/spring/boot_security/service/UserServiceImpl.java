@@ -41,14 +41,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly=true)
     public User getUserById(Long id) {
 
         return this.userDAO.getUserById(id);
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly=true)
     public List<User> getAllUsers() {
         return this.userDAO.getAllUsers();
     }
