@@ -1,5 +1,6 @@
 package ru.spring.boot_security.controller;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.spring.boot_security.model.User;
 import ru.spring.boot_security.model.UserRole;
@@ -19,11 +20,13 @@ public class AdminController {
 
     private final UserService userService;
     private final UserRoleRepository userRoleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminController(UserService userService, UserRoleRepository userRoleRepository) {
+    public AdminController(UserService userService, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userRoleRepository = userRoleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -51,10 +54,11 @@ public class AdminController {
             user.setRoles(roles);
         }
         userService.addUser(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return "redirect:/admin";
     }
 
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String removeUser(@PathVariable Long id) {
         userService.removeUser(id);
         return "redirect:/admin";
@@ -68,6 +72,9 @@ public class AdminController {
                 userRoleRepository.findById(roleId).ifPresent(roles::add);
             }
             user.setRoles(roles);
+        }
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         userService.updateUser(user);
         return "redirect:/admin";

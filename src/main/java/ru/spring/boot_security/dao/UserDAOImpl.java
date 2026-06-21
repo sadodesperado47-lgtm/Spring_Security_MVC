@@ -2,6 +2,7 @@ package ru.spring.boot_security.dao;
 
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import ru.spring.boot_security.model.User;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,18 @@ public class UserDAOImpl implements UserDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    public User findByUsername(String username) {
+        try {
+            return entityManager.createQuery(
+                            "SELECT u FROM User u JOIN FETCH u.roles WHERE u.username = :username",
+                            User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
     @Override
     public void addUser(User user) {

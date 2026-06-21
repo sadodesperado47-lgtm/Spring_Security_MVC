@@ -40,7 +40,7 @@ public class User implements UserDetails {
     @Column(name = "username", unique = true)
     private String username;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -68,6 +68,7 @@ public class User implements UserDetails {
     public String getLastname() { return lastname; }
     public String getEmail() { return email; }
     public Set<UserRole> getRoles() { return roles; }
+
 
 
     public void setId(Long id) { this.id = id; }
