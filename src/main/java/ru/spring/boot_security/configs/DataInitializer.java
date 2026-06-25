@@ -8,7 +8,7 @@ import ru.spring.boot_security.model.User;
 import ru.spring.boot_security.model.UserRole;
 import ru.spring.boot_security.repository.UserRepository;
 import ru.spring.boot_security.repository.UserRoleRepository;
-
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -44,7 +44,10 @@ public class DataInitializer {
             admin.setLastname("Adminov");
             admin.setAge(40);
             admin.setEmail("admin@mail.ru");
-            admin.setRoles(Set.of(roleAdmin, roleUser));
+                Set<UserRole> roles = new HashSet<>();
+                roles.add(roleAdmin);
+                roles.add(roleUser);
+                admin.setRoles(roles);
             userRepository.save(admin);
         }
     }

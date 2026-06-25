@@ -30,20 +30,26 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/webjars/**").permitAll()
-                        .requestMatchers("/", "/index").permitAll()
+                        .requestMatchers("/", "/index", "/login").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
                         .successHandler(successUserHandler)
+                        .failureUrl("/login?error")
                         .permitAll())
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/")
-                        .permitAll())
-                .csrf(csrf->csrf.disable());
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll());
+
         http.userDetailsService(userDetailsService);
 
         return http.build();

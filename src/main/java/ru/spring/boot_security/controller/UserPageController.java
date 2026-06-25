@@ -12,8 +12,8 @@ import ru.spring.boot_security.model.User;
 public class UserPageController {
 
     @GetMapping
-    public String userPage(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("user", user);
+    public String userPage(Model model, @AuthenticationPrincipal User currentUser) {
+        model.addAttribute("currentUser", currentUser);
         return "user";
     }
 }
