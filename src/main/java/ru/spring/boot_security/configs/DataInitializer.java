@@ -42,6 +42,7 @@ public class DataInitializer {
             admin.setPassword(passwordEncoder.encode("admin"));
             admin.setName("Admin");
             admin.setLastname("Adminov");
+            admin.setAge(40);
             admin.setEmail("admin@mail.ru");
             admin.setRoles(Set.of(roleAdmin, roleUser));
             userRepository.save(admin);
