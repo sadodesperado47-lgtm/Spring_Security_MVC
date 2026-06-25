@@ -42,8 +42,21 @@ public class AdminController {
         model.addAttribute("users",       userService.getAllUsers());
         model.addAttribute("allRoles",    userRoleRepository.findAll());
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("newUser",     new User()); // для формы добавления
+        model.addAttribute("newUser",     new User());
         model.addAttribute("activeTab",   "usersTable");
+        return "admin";
+    }
+
+    @GetMapping("/admin/new")
+    public String newUserForm(Model model,
+                              @AuthenticationPrincipal User currentUser) {
+        model.addAttribute("users",       userService.getAllUsers());
+        model.addAttribute("allRoles",    userRoleRepository.findAll());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("newUser",     new User());
+        // ✅ Атрибут "user" нужен для th:object="${user}" в шаблоне new-user.html
+        model.addAttribute("user",        new User());
+        model.addAttribute("activeTab",   "newUser");
         return "admin";
     }
 

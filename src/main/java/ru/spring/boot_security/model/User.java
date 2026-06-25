@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -43,6 +44,7 @@ public class User implements UserDetails {
     @Column(name = "username", unique = true)
     private String username;
 
+    // ✅ LAZY оставлен как было в оригинале
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_roles",
@@ -51,19 +53,11 @@ public class User implements UserDetails {
     )
     private Set<UserRole> roles;
 
+    public User() {}
+
     public User(Integer age) {
         this.age = age;
     }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public User() {}
 
     public User(String password, String username) {
         this.password = password;
@@ -77,37 +71,52 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    // Getters
+
     public Long getId() { return id; }
+
     public String getName() { return name; }
+
+    public String getFirstName() { return name; }
+    public String getLastName() { return lastname; }
+
     public String getLastname() { return lastname; }
+
+    public Integer getAge() { return age; }
+
     public String getEmail() { return email; }
+
     public Set<UserRole> getRoles() { return roles; }
 
 
-
     public void setId(Long id) { this.id = id; }
+
     public void setName(String name) { this.name = name; }
+
+
+    public void setFirstName(String firstName) { this.name = firstName; }
+    public void setLastName(String lastName) { this.lastname = lastName; }
+
     public void setLastname(String lastname) { this.lastname = lastname; }
+
+    public void setAge(Integer age) { this.age = age; }
+
     public void setEmail(String email) { this.email = email; }
+
     public void setPassword(String password) { this.password = password; }
+
     public void setUsername(String username) { this.username = username; }
+
     public void setRoles(Set<UserRole> roles) { this.roles = roles; }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
 
     @Override
-    public String getPassword() {
-        return password;
-    }
+    public Collection<? extends GrantedAuthority> getAuthorities() { return roles; }
 
     @Override
-    public String getUsername() {
-        return username;
-    }
+    public String getPassword() { return password; }
+
+    @Override
+    public String getUsername() { return username; }
 
     @Override
     public boolean isAccountNonExpired() { return true; }
@@ -121,16 +130,17 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() { return true; }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id != null && id.equals(user.id);
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return Objects.hash(id);
     }
 }
