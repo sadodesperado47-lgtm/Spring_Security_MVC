@@ -4,10 +4,9 @@ package ru.spring.boot_security.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import org.hibernate.Hibernate;
 import ru.spring.boot_security.model.User;
 import org.springframework.stereotype.Repository;
-
-
 import java.util.List;
 
 @Repository
@@ -18,11 +17,14 @@ public class UserDAOImpl implements UserDAO {
 
     public User findByUsername(String username) {
         try {
-            return entityManager.createQuery(
-                            "SELECT u FROM User u JOIN FETCH u.roles WHERE u.username = :username",
+            User user = entityManager.createQuery(
+                            "SELECT u FROM User u WHERE u.username = :username",
                             User.class)
                     .setParameter("username", username)
                     .getSingleResult();
+
+            Hibernate.initialize(user.getRoles());
+            return user;
         } catch (NoResultException e) {
             return null;
         }
@@ -49,12 +51,19 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User getUserById(Long id) {
-        return entityManager.find(User.class, id);
+        User user = entityManager.find(User.class, id);
+        if (user != null) {
+
+            Hibernate.initialize(user.getRoles());
+        }
+        return user;
     }
 
     @Override
     public List<User> getAllUsers() {
-        return entityManager.createQuery("FROM User", User.class).getResultList();
+        List<User> users = entityManager.createQuery("FROM User", User.class).getResultList();
+        
+        users.forEach(user -> Hibernate.initialize(user.getRoles()));
+        return users;
     }
 }
-

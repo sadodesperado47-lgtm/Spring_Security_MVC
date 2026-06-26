@@ -30,7 +30,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // ✅ CSRF включён — убрали csrf.disable()
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/", "/index", "/login").permitAll()

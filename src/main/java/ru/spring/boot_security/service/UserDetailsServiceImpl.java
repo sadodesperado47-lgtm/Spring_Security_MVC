@@ -1,5 +1,6 @@
 package ru.spring.boot_security.service;
 
+
 import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,14 +11,12 @@ import ru.spring.boot_security.model.User;
 import ru.spring.boot_security.repository.UserRepository;
 import java.util.Optional;
 
-
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     public UserDetailsServiceImpl(UserRepository userRepository) {
-
         this.userRepository = userRepository;
     }
 

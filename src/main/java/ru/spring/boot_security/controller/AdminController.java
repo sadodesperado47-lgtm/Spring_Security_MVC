@@ -54,23 +54,21 @@ public class AdminController {
         model.addAttribute("allRoles",    userRoleRepository.findAll());
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("newUser",     new User());
-        // ✅ Атрибут "user" нужен для th:object="${user}" в шаблоне new-user.html
-        model.addAttribute("user",        new User());
-        model.addAttribute("activeTab",   "newUser");
-        return "admin";
+        return "add-new-user"; // ← имя шаблона add-new-user.html
     }
 
     @GetMapping("/admin/edit/{id}")
     public String openEditModal(Model model,
                                 @PathVariable Long id,
                                 @AuthenticationPrincipal User currentUser) {
+        User editUser = userService.getUserById(id);
         model.addAttribute("users",       userService.getAllUsers());
         model.addAttribute("allRoles",    userRoleRepository.findAll());
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("newUser",     new User());
-        model.addAttribute("editUser",    userService.getUserById(id));
-        model.addAttribute("activeTab",   "usersTable");
-        return "admin";
+        model.addAttribute("editUser",    editUser);
+        model.addAttribute("activeTab",   "editModal");
+        return "edit-user";
     }
 
     @GetMapping("/admin/delete/{id}")
@@ -82,7 +80,7 @@ public class AdminController {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("newUser",     new User());
         model.addAttribute("deleteUser",  userService.getUserById(id));
-        model.addAttribute("activeTab",   "usersTable");
+        model.addAttribute("activeTab",   "deleteModal");
         return "admin";
     }
 
@@ -90,7 +88,7 @@ public class AdminController {
     public String addUser(@ModelAttribute("newUser") User user,
                           @RequestParam(value = "roleIds", required = false)
                           List<Long> roleIds) {
-        if (roleIds != null) {
+        if (roleIds != null && !roleIds.isEmpty()) {
             Set<UserRole> roles = new HashSet<>();
             for (Long roleId : roleIds) {
                 userRoleRepository.findById(roleId).ifPresent(roles::add);
@@ -112,16 +110,26 @@ public class AdminController {
     public String updateUser(@ModelAttribute("editUser") User user,
                              @RequestParam(value = "roleIds", required = false)
                              List<Long> roleIds) {
-        if (roleIds != null) {
+        // Получаем существующего пользователя для сохранения пароля
+        User existingUser = userService.getUserById(user.getId());
+
+        if (roleIds != null && !roleIds.isEmpty()) {
             Set<UserRole> roles = new HashSet<>();
             for (Long roleId : roleIds) {
                 userRoleRepository.findById(roleId).ifPresent(roles::add);
             }
             user.setRoles(roles);
+        } else {
+            user.setRoles(new HashSet<>());
         }
+
+        // Обработка пароля
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+        } else {
+            user.setPassword(existingUser.getPassword());
         }
+
         userService.updateUser(user);
         return "redirect:/admin";
     }

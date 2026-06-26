@@ -15,7 +15,7 @@ public class UserPageController {
     public String userPage(Model model,
                            @AuthenticationPrincipal User currentUser) {
         model.addAttribute("currentUser", currentUser);
-        // ✅ Добавлен атрибут "user" — используется в шаблоне user.html
+
         model.addAttribute("user", currentUser);
         return "user";
     }

@@ -5,7 +5,6 @@ import ru.spring.boot_security.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 
@@ -16,7 +15,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public void setUserDAO(UserDAO userDAO) {
-
         this.userDAO = userDAO;
     }
 
@@ -24,13 +22,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void addUser(User user) {
         this.userDAO.addUser(user);
-
     }
 
     @Override
     @Transactional
     public void updateUser(User user) {
-
         this.userDAO.updateUser(user);
     }
 
@@ -41,15 +37,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public User getUserById(Long id) {
-
         return this.userDAO.getUserById(id);
     }
 
     @Override
-    @Transactional(readOnly=true)
+    @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return this.userDAO.getAllUsers();
     }
-    }
+}

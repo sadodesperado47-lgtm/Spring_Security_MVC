@@ -30,13 +30,14 @@ public class DataInitializer {
     @PostConstruct
     public void init() {
 
-         UserRole roleUser = userRoleRepository.findByName("ROLE_USER")
+        UserRole roleUser = userRoleRepository.findByName("ROLE_USER")
                 .orElseGet(() -> userRoleRepository.save(new UserRole("ROLE_USER")));
 
         UserRole roleAdmin = userRoleRepository.findByName("ROLE_ADMIN")
                 .orElseGet(() -> userRoleRepository.save(new UserRole("ROLE_ADMIN")));
 
-            if (userRepository.findByUsername("admin") == null) {
+
+        if (userRepository.findByUsername("admin") == null) {
             User admin = new User();
             admin.setUsername("admin");
             admin.setPassword(passwordEncoder.encode("admin"));
@@ -44,11 +45,26 @@ public class DataInitializer {
             admin.setLastname("Adminov");
             admin.setAge(40);
             admin.setEmail("admin@mail.ru");
-                Set<UserRole> roles = new HashSet<>();
-                roles.add(roleAdmin);
-                roles.add(roleUser);
-                admin.setRoles(roles);
+            Set<UserRole> roles = new HashSet<>();
+            roles.add(roleAdmin);
+            roles.add(roleUser);
+            admin.setRoles(roles);
             userRepository.save(admin);
+        }
+
+
+        if (userRepository.findByUsername("user") == null) {
+            User user = new User();
+            user.setUsername("user");
+            user.setPassword(passwordEncoder.encode("user"));
+            user.setName("User");
+            user.setLastname("Userov");
+            user.setAge(25);
+            user.setEmail("user@mail.ru");
+            Set<UserRole> roles = new HashSet<>();
+            roles.add(roleUser);
+            user.setRoles(roles);
+            userRepository.save(user);
         }
     }
 }
